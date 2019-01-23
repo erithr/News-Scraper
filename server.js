@@ -26,7 +26,7 @@ app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
 
-// let uri = 'mongodb://heroku_x6xcmc3p:ff1ta3bt5ctk2c7dmm6s15hslu@ds163254.mlab.com:63254/heroku_x6xcmc3p';
+//creating our MONGODB URI connection as well as the default local host option
 let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
 // Connect to the Mongo DB
@@ -37,28 +37,34 @@ mongoose.connect(MONGODB_URI);
 // A GET route for scraping the echoJS website
 app.get("/scrape", function (req, res) {
   // First, we grab the body of the html with axios
-  axios.get("http://www.echojs.com/").then(function (response) {
+  axios.get("http://www.cracked.com/funny-articles.html").then(function (response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     const $ = cheerio.load(response.data);
 
-    // Now, we grab every h2 within an article tag, and do the following:
-    $("article h2").each(function (i, element) {
+    // Now, we grab every h3 within an article tag, and do the following:
+    $(".content-card-content").each(function (i, element) {
       // Save an empty result object
       const result = {};
 
       // Add the text and href of every link, and save them as properties of the result object
       result.title = $(this)
-        .children("a")
+        .children("h3")
         .text();
+      //need to chain children to get to the href inside the h3 div
       result.link = $(this)
+        .children("h3")
         .children("a")
         .attr("href");
+      result.description = $(this)
+        .children("p")
+        .text();
 
       // Create a new Article using the `result` object built from scraping
       db.Article.create(result)
         .then(function (dbArticle) {
           // View the added result in the console
           console.log(dbArticle);
+          console.log(result.description)
         })
         .catch(function (err) {
           // If an error occurred, log it
