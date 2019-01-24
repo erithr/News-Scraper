@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 //creating our MONGODB URI connection as well as the default local host option
-let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+let MONGODB_URI = process.env.MONGODB_URI || "mongodb://casper:ghost1@ds163254.mlab.com:63254/heroku_x6xcmc3p";
 
 // Connect to the Mongo DB
 mongoose.connect(MONGODB_URI);
