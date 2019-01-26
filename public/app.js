@@ -3,15 +3,15 @@ $.getJSON("/articles", function (data) {
   // For each one
   for (var i = 0; i < data.length; i++) {
     // Display the apropos information on the page
-    $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "</p>");
+    $("#articles").append("<h3 data-id='" + data[i]._id + "'>" + data[i].title + "</h3>");
     $("#articles").append("<p>" + data[i].description + "</p>");
-    $("#articles").append("<p>" + "<a href= '" + data[i].link + "'>" + "Link Here" + "</p>" + "<br>");
+    $("#articles").append("<p>" + "<a href= '" + data[i].link + "' target='_blank'>" + "Link Here" + "</p>" + "<br>");
   }
 });
 
 
 // Whenever someone clicks a p tag
-$(document).on("click", "p", function () {
+$(document).on("click", "h3", function () {
   // Empty the notes from the note section
   $("#notes").empty();
   // Save the id from the p tag
